@@ -13,7 +13,7 @@ public interface ServerService {
 	List<Info> getAll();
 	Info getUser(Criteria criteria);
 	Info getStudent(Criteria criteria);
-	boolean regStudent(String name, String newName, String averageScore);
+	boolean registerStudent(String name, String newName, String averageScore);
 	boolean addStudent(String name, String averageScore) throws ParserConfigurationException, TransformerException, SAXException, IOException;
 	boolean addUser(String name, String password, String allowance) throws IOException, SAXException, ParserConfigurationException, TransformerException;
 }

@@ -1,6 +1,6 @@
 package bsuir.client.service;
 
-import bsuir.client.clientconsole.CommandReader;
+import bsuir.client.clientconsole.Reader;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ public class ClientLogic {
     private boolean serverEnable;
 
     public void startClient() throws IOException {
-        CommandReader commandReader = new CommandReader();
+        Reader commandReader = new Reader();
         serverEnable = client.makeConnection();
 
         if (serverEnable) {
@@ -18,15 +18,15 @@ public class ClientLogic {
             serverReader.start();
         }
 
-        while (!command.equals("EXIT") && serverEnable){
+        while (!command.equals("EXIT") && serverEnable) {
             command = commandReader.getCommand();
-            command = command.replaceAll("\\s+","_");
+            command = command.replaceAll("\\s+", "_");
             System.out.println(command);
-            client.sendCommand(command.replaceAll("\\s+","_")+"\n");
+            client.sendCommand(command.replaceAll("\\s+", "_") + "\n");
         }
     }
 
-    public void setNonEnable(){
+    public void setNonEnable() {
         serverEnable = false;
     }
 

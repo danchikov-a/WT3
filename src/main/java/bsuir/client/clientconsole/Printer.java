@@ -1,7 +1,7 @@
 package bsuir.client.clientconsole;
 
-public class CommandPrinter {
-    public void print(String data){
+public class Printer {
+    public void print(String data) {
         System.out.println(data);
     }
 }

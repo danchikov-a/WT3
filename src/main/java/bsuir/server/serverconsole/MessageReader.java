@@ -1,16 +1,16 @@
 package bsuir.server.serverconsole;
 
-import bsuir.server.service.ServerLogic;
+import bsuir.server.service.ServerLogicHandler;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class MsgReader extends Thread{
+public class MessageReader extends Thread{
     private final Scanner scan = new Scanner(System.in);
-    private final ServerLogic serverLogic;
+    private final ServerLogicHandler serverLogicHandler;
 
-    public MsgReader(ServerLogic serverLogic){
-        this.serverLogic = serverLogic;
+    public MessageReader(ServerLogicHandler serverLogicHandler){
+        this.serverLogicHandler = serverLogicHandler;
     }
 
     public void run(){
@@ -18,7 +18,7 @@ public class MsgReader extends Thread{
 
         if (command.equals("STOP")) {
             try {
-                serverLogic.stopConnection();
+                serverLogicHandler.stopConnection();
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }

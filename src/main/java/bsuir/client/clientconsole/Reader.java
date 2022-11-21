@@ -2,10 +2,10 @@ package bsuir.client.clientconsole;
 
 import java.util.Scanner;
 
-public class CommandReader {
+public class Reader {
     private final Scanner scan = new Scanner(System.in);
 
-    public String getCommand(){
+    public String getCommand() {
         return scan.nextLine();
     }
 }

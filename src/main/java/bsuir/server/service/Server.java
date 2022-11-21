@@ -11,10 +11,10 @@ public class Server {
     private BufferedReader in;
     private BufferedWriter out;
 
-    private final ServerLogic serverLogic;
+    private final ServerLogicHandler serverLogicHandler;
 
-    public Server(ServerLogic serverLogic) {
-        this.serverLogic = serverLogic;
+    public Server(ServerLogicHandler serverLogicHandler) {
+        this.serverLogicHandler = serverLogicHandler;
     }
 
     public boolean makeConnection() {
@@ -66,7 +66,7 @@ public class Server {
             clientSocket.close();
             in.close();
             out.close();
-            serverLogic.startConnection();
+            serverLogicHandler.startConnection();
         }
 
         return "";
@@ -80,7 +80,7 @@ public class Server {
             clientSocket.close();
             in.close();
             out.close();
-            serverLogic.startConnection();
+            serverLogicHandler.startConnection();
         }
     }
 
@@ -92,7 +92,7 @@ public class Server {
             clientSocket.close();
             in.close();
             out.close();
-            serverLogic.startConnection();
+            serverLogicHandler.startConnection();
         }
     }
 

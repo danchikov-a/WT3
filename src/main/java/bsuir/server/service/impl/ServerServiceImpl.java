@@ -58,7 +58,7 @@ public class ServerServiceImpl implements ServerService {
         }
     }
 
-    public boolean regStudent(String name, String newName, String averageScore) {
+    public boolean registerStudent(String name, String newName, String averageScore) {
         DAOFactory factory = DAOFactory.getInstance();
         ApplianceDAO applianceDAO = factory.getApplianceDAO();
         List<String[]> parameters = new ArrayList<>();

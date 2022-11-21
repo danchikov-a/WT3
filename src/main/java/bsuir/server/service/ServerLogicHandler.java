@@ -3,20 +3,20 @@ package bsuir.server.service;
 import bsuir.server.entity.criteria.Criteria;
 import bsuir.server.entity.criteria.SearchCriteria;
 import bsuir.server.entity.info.ClientInfo;
-import bsuir.server.serverconsole.ResultPrinter;
-import bsuir.server.serverconsole.MsgReader;
+import bsuir.server.serverconsole.Printer;
+import bsuir.server.serverconsole.MessageReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerLogic {
+public class ServerLogicHandler {
     private static final String EMPTY_FIELD = "";
     private static final String EXIT_MESSAGE = "EXIT";
 
     private final Criteria criteria;
     private final Criteria studentCriteria;
-    private final ResultPrinter resultPrinter;
+    private final Printer printer;
     private final List<Thread> threads;
     private final Server server;
 
@@ -25,14 +25,14 @@ public class ServerLogic {
 
     {
         server = new Server(this);
-        resultPrinter = new ResultPrinter();
+        printer = new Printer();
         studentCriteria = new Criteria(SearchCriteria.Student.getCriteriaName());
         criteria = new Criteria(SearchCriteria.Client.getCriteriaName());
         threads = new ArrayList<>();
     }
 
-    public ServerLogic() {
-        Thread consoleReader = new MsgReader(this);
+    public ServerLogicHandler() {
+        Thread consoleReader = new MessageReader(this);
         consoleReader.start();
     }
 
@@ -52,7 +52,7 @@ public class ServerLogic {
 
         while (isServerWorking) {
             String command = server.getCommand();
-            Thread newCommand = new CommandHandler(command, this);
+            Thread newCommand = new ConsoleHandler(command, this);
             newCommand.start();
 
             if (!command.equals(EXIT_MESSAGE)) {
@@ -89,7 +89,7 @@ public class ServerLogic {
         return studentCriteria;
     }
 
-    public ResultPrinter getResultPrinter() {
-        return resultPrinter;
+    public Printer getResultPrinter() {
+        return printer;
     }
 }

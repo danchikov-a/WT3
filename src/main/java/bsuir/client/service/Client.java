@@ -39,7 +39,7 @@ public class Client {
         try {
             out.write(command + "\n");
             out.flush();
-        } catch (IOException e){
+        } catch (IOException e) {
             in.close();
             out.close();
             clientSocket.close();
@@ -49,7 +49,7 @@ public class Client {
     public String getData() throws IOException {
         try {
             return in.readLine();
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e);
         }
 

@@ -9,13 +9,13 @@ import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.List;
 
-public class CommandHandler extends Thread {
+public class ConsoleHandler extends Thread {
     private final String fullCommand;
-    private final ServerLogic serverLogic;
+    private final ServerLogicHandler serverLogicHandler;
 
-    public CommandHandler(String command, ServerLogic serverLogic) {
+    public ConsoleHandler(String command, ServerLogicHandler serverLogicHandler) {
         this.fullCommand = command;
-        this.serverLogic = serverLogic;
+        this.serverLogicHandler = serverLogicHandler;
     }
 
     public void run() {
@@ -33,8 +33,8 @@ public class CommandHandler extends Thread {
         switch (command) {
             case "EXIT" -> {
                 try {
-                    serverLogic.stopConnection();
-                    serverLogic.startConnection();
+                    serverLogicHandler.stopConnection();
+                    serverLogicHandler.startConnection();
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
@@ -61,16 +61,16 @@ public class CommandHandler extends Thread {
 
                 if (isAdded) {
                     try {
-                        serverLogic.sendData("REG Name: " + name + ", Password: " + password + ", allowance: " + allowance + "\n");
+                        serverLogicHandler.sendData("REG Name: " + name + ", Password: " + password + ", allowance: " + allowance + "\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    serverLogic.getClientInfo().setAllowance(allowance);
-                    serverLogic.getClientInfo().setName(name);
+                    serverLogicHandler.getClientInfo().setAllowance(allowance);
+                    serverLogicHandler.getClientInfo().setName(name);
                 } else {
                     try {
-                        serverLogic.sendData("TRY AGAIN\n");
+                        serverLogicHandler.sendData("TRY AGAIN\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -83,24 +83,24 @@ public class CommandHandler extends Thread {
                 index = fullCommand.indexOf("[", newIndex);
                 newIndex = fullCommand.indexOf("]", index);
                 String password = fullCommand.substring(index + 1, newIndex);
-                serverLogic.getClientCriteria().add(SearchCriteria.Client.name.getEnumName(), name);
-                serverLogic.getClientCriteria().add(SearchCriteria.Client.password.getEnumName(), password);
+                serverLogicHandler.getClientCriteria().add(SearchCriteria.Client.name.getEnumName(), name);
+                serverLogicHandler.getClientCriteria().add(SearchCriteria.Client.password.getEnumName(), password);
                 ServiceFactory factory = ServiceFactory.getInstance();
                 ServerService service = factory.getApplianceService();
-                Info clientInfo = service.getUser(serverLogic.getClientCriteria());
+                Info clientInfo = service.getUser(serverLogicHandler.getClientCriteria());
 
                 if (clientInfo != null) {
-                    serverLogic.getClientInfo().setName(clientInfo.getParameters().get(0));
-                    serverLogic.getClientInfo().setAllowance(clientInfo.getParameters().get(1));
+                    serverLogicHandler.getClientInfo().setName(clientInfo.getParameters().get(0));
+                    serverLogicHandler.getClientInfo().setAllowance(clientInfo.getParameters().get(1));
 
                     try {
-                        serverLogic.sendData("LOGIN Name: " + serverLogic.getClientInfo().getName() + ", allowance: " + serverLogic.getClientInfo().getAllowance() + "\n");
+                        serverLogicHandler.sendData("LOGIN Name: " + serverLogicHandler.getClientInfo().getName() + ", allowance: " + serverLogicHandler.getClientInfo().getAllowance() + "\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 } else {
                     try {
-                        serverLogic.sendData("TRY AGAIN\n");
+                        serverLogicHandler.sendData("TRY AGAIN\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -108,7 +108,7 @@ public class CommandHandler extends Thread {
             }
 
             case "GETALL" -> {
-                if (!serverLogic.getClientInfo().getAllowance().equals("")) {
+                if (!serverLogicHandler.getClientInfo().getAllowance().equals("")) {
                     ServiceFactory factory = ServiceFactory.getInstance();
                     ServerService service = factory.getApplianceService();
                     List<Info> studentInfoList = service.getAll();
@@ -120,20 +120,20 @@ public class CommandHandler extends Thread {
                         }
 
                         try {
-                            serverLogic.sendData(data.toString());
+                            serverLogicHandler.sendData(data.toString());
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     } else {
                         try {
-                            serverLogic.sendData("TRY AGAIN\n");
+                            serverLogicHandler.sendData("TRY AGAIN\n");
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
                     try {
-                        serverLogic.sendData("Not enough rights\n");
+                        serverLogicHandler.sendData("Not enough rights\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -141,35 +141,35 @@ public class CommandHandler extends Thread {
             }
 
             case "GET" -> {
-                if (!serverLogic.getClientInfo().getAllowance().equals("")) {
+                if (!serverLogicHandler.getClientInfo().getAllowance().equals("")) {
                     int newIndex = fullCommand.indexOf("]", index);
                     String name = fullCommand.substring(index + 1, newIndex);
                     ServiceFactory factory = ServiceFactory.getInstance();
                     ServerService service = factory.getApplianceService();
-                    serverLogic.getStudentCriteria().getCriteria().clear();
-                    serverLogic.getStudentCriteria().add(SearchCriteria.Student.name.getEnumName(), name);
+                    serverLogicHandler.getStudentCriteria().getCriteria().clear();
+                    serverLogicHandler.getStudentCriteria().add(SearchCriteria.Student.name.getEnumName(), name);
                     Info studentInfo;
-                    studentInfo = service.getStudent(serverLogic.getStudentCriteria());
+                    studentInfo = service.getStudent(serverLogicHandler.getStudentCriteria());
                     String data;
 
                     if (studentInfo != null) {
                         data = String.format("Name: %s\n", studentInfo.toString());
 
                         try {
-                            serverLogic.sendData(data);
+                            serverLogicHandler.sendData(data);
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     } else {
                         try {
-                            serverLogic.sendData("TRY AGAIN\n");
+                            serverLogicHandler.sendData("TRY AGAIN\n");
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
                     try {
-                        serverLogic.sendData("Not enough rights\n");
+                        serverLogicHandler.sendData("Not enough rights\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -177,7 +177,7 @@ public class CommandHandler extends Thread {
             }
 
             case "EDIT" -> {
-                if (serverLogic.getClientInfo().getAllowance().equals("EDIT") || serverLogic.getClientInfo().getAllowance().equals("ADD")) {
+                if (serverLogicHandler.getClientInfo().getAllowance().equals("EDIT") || serverLogicHandler.getClientInfo().getAllowance().equals("ADD")) {
                     int newIndex = fullCommand.indexOf("]", index);
                     String name = fullCommand.substring(index + 1, newIndex);
                     index = fullCommand.indexOf("[", newIndex);
@@ -188,25 +188,25 @@ public class CommandHandler extends Thread {
                     String averageScore = fullCommand.substring(index + 1, newIndex);
                     ServiceFactory factory = ServiceFactory.getInstance();
                     ServerService service = factory.getApplianceService();
-                    boolean isEdit = service.regStudent(name, newName, averageScore);
+                    boolean isEdit = service.registerStudent(name, newName, averageScore);
 
                     if (isEdit) {
                         try {
-                            serverLogic.sendData(String.format("EDIT Name: %s, newName: %s, averageScore: %s\n",
+                            serverLogicHandler.sendData(String.format("EDIT Name: %s, newName: %s, averageScore: %s\n",
                                     name, newName, averageScore));
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     } else {
                         try {
-                            serverLogic.sendData("TRY AGAIN\n");
+                            serverLogicHandler.sendData("TRY AGAIN\n");
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
                     try {
-                        serverLogic.sendData("Not enough rights\n");
+                        serverLogicHandler.sendData("Not enough rights\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -214,7 +214,7 @@ public class CommandHandler extends Thread {
             }
 
             case "ADD" -> {
-                if (serverLogic.getClientInfo().getAllowance().equals("ADD")) {
+                if (serverLogicHandler.getClientInfo().getAllowance().equals("ADD")) {
                     int newIndex = fullCommand.indexOf("]", index);
                     String name = fullCommand.substring(index + 1, newIndex);
                     index = fullCommand.indexOf("[", newIndex);
@@ -231,30 +231,30 @@ public class CommandHandler extends Thread {
                     }
                     if (isAdded) {
                         try {
-                            serverLogic.sendData("ADD Name: " + name + ", AverageScore: " + averageScore + "\n");
+                            serverLogicHandler.sendData("ADD Name: " + name + ", AverageScore: " + averageScore + "\n");
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     } else {
                         try {
-                            serverLogic.sendData("TRY AGAIN\n");
+                            serverLogicHandler.sendData("TRY AGAIN\n");
                         } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
                     try {
-                        serverLogic.sendData("Not enough rights\n");
+                        serverLogicHandler.sendData("Not enough rights\n");
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
             case "LOGOUT" -> {
-                serverLogic.getClientInfo().setName("");
-                serverLogic.getClientInfo().setAllowance("");
+                serverLogicHandler.getClientInfo().setName("");
+                serverLogicHandler.getClientInfo().setAllowance("");
                 try {
-                    serverLogic.sendData("Please, Login\n");
+                    serverLogicHandler.sendData("Please, Login\n");
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
