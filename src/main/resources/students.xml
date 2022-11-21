@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><students>
+	<Student>
+		<name>Student1</name>
+		<averageScore>7</averageScore>
+	</Student>
+	<Student>
+		<name>Student2</name>
+		<averageScore>8</averageScore>
+	</Student>
+	<Student>
+		<name>Student3</name>
+		<averageScore>5</averageScore>
+	</Student>
+	<Student>
+		<name>Student4</name>
+		<averageScore>3</averageScore>
+	</Student>
+	<Student>
+		<name>Student5</name>
+		<averageScore>1</averageScore>
+	</Student>
+	<Student>
+		<name>Student6</name>
+		<averageScore>9</averageScore>
+	</Student>
+
+</students>

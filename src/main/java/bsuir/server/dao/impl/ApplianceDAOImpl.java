@@ -33,7 +33,7 @@ public class ApplianceDAOImpl implements ApplianceDAO {
 	}
 
 	public List<Info> getAll(String path, String type){
-		File xmlFile = new File("src/main/resources/students_db.xml");
+		File xmlFile = new File("src/main/resources/students.xml");
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 

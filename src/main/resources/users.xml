@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><clients>
+	<Client>
+		<name>Artem</name>
+		<password>qwe</password>
+		<allowance>ADD</allowance>
+	</Client>
+	<Client>
+		<name>Volodya</name>
+		<password>asd</password>
+		<allowance>EDIT</allowance>
+	</Client>
+	<Client>
+		<name>Kirill</name>
+		<password>kirillkirill</password>
+		<allowance>EDIT</allowance>
+	</Client>
+	<Client>
+		<name>Vitya</name>
+		<password>nevitya</password>
+		<allowance>Add</allowance>
+	</Client>
+</clients>
